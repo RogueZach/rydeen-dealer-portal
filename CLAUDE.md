@@ -15,7 +15,7 @@ The original spec calls for building on irearview.com, but this repo is being de
 - **UI:** Tailwind CSS + shadcn/ui
 - **Email:** Resend (order notifications to orders@rydeenmobile.com)
 - **Testing:** Vitest + React Testing Library
-- **Deployment:** TBD (Railway is a candidate)
+- **Deployment:** Railway
 
 ## Commands
 
@@ -25,6 +25,11 @@ npm run build      # Production build
 npm run test       # Run tests (watch mode)
 npm run test:run   # Run tests once
 npm run lint       # ESLint
+
+# Supabase CLI
+supabase db push                          # Apply pending migrations to remote
+supabase migration new <name>             # Create new migration
+psql "<connection-string>" -f supabase/seed.sql  # Apply seed data
 ```
 
 ## Architecture
@@ -36,8 +41,9 @@ npm run lint       # ESLint
 - `src/lib/queries/` — Server-side data fetching functions
 - `src/lib/pricing.ts` — Dealer price calculation (MSRP × discount percentage)
 - `src/middleware.ts` — Route protection (redirects unauthenticated users from `/portal/*` to `/login`)
-- `supabase/schema.sql` — Full database schema with RLS policies
+- `supabase/migrations/` — Versioned SQL migrations (applied with `supabase db push`)
 - `supabase/seed.sql` — Sample product/category data
+- `scripts/verify-rls.sql` — RLS and schema verification queries
 
 ## Business Rules
 
@@ -93,3 +99,12 @@ Plus a "Recent Orders" section with "Browse Catalog" CTA when empty.
 - Portal also serves as an FAQ library with PDFs, Q&As, and downloads.
 - Multiple ship-to addresses per dealer profile (dealer self-manages preferred).
 - Mobile-friendly (future APP version desired).
+
+## Deployment
+
+- **Database:** Supabase project `ucznyddkynebsssltjru` (managed via CLI migrations)
+- **Hosting:** Railway (Next.js)
+- **Email:** Resend (order notifications to orders@rydeenmobile.com)
+- **Migrations:** `supabase/migrations/` — versioned SQL files applied with `supabase db push`
+- **Seed data:** `supabase/seed.sql` — pricing tiers, categories, sample products
+- **Full guide:** `docs/deployment.md`
