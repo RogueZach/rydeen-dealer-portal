@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { useCart } from '@/lib/cart/context'
+import { CartSheet } from '@/components/cart/cart-sheet'
 import type { Profile } from '@/types/database'
 
 export function PortalHeader({ profile }: { profile: Profile }) {
@@ -32,7 +33,7 @@ export function PortalHeader({ profile }: { profile: Profile }) {
           </nav>
         </div>
         <div className="flex items-center gap-4">
-          <Link href="/portal/cart">
+          <CartSheet>
             <Button variant="outline" size="sm">
               Cart
               {cartItemCount > 0 && (
@@ -41,7 +42,7 @@ export function PortalHeader({ profile }: { profile: Profile }) {
                 </span>
               )}
             </Button>
-          </Link>
+          </CartSheet>
           <span className="text-sm text-muted-foreground hidden md:inline">
             {profile.company_name || profile.email}
           </span>
